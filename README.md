@@ -1,4 +1,4 @@
-# Lattice Boltzmann Fluid Simulation (Rust)
+# Lattice Boltzmann Fluid Simulation 
 
 <img width="1563" height="848" alt="image" src="https://github.com/user-attachments/assets/b6ebbd4b-eec7-4fee-98d7-f9604aed2bdb" />
 
@@ -6,13 +6,13 @@ This is a 2D fluid simulation written in **Rust**, using the
 **Lattice Boltzmann Method (LBM)** with a **D2Q9 lattice** and the
 **BGK collision model**.
 
-This is my first serious attempt at building a fluid simulation from scratch.
+This is my first serious attempt at building a fluid simulation from scratch:)
 The main goals of this project are:
-- really understanding how the LBM algorithm works, step by step
+- understanding how the LBM algorithm works
 - exploring how efficiently it can be implemented in Rust
-- playing with different geometries to observe behaviours of fluid
+- playing with different geometries and observe behaviours of fluid
 
-This is a learning / exploration project rather than a production CFD solver.
+This is a learning / exploration project rather than a efficient CFD solver. 
 
 ---
 
@@ -29,7 +29,7 @@ Core components:
 - `GridStats` – handles grid geometry (shape, length), and allows the computation of 'scalar field' and 'vector field' on it
 - `ObstacleBoard` – fast bitboard-based obstacle representation, able to map lines drawn in position space to flipped bit in the bitboard, generalized so any piece-wise curve can be drawn (such as an entire maze)
 - `FluidState` – stores density and velcocities in a single fluid type cell
-- `Cell` – enum distinguishing fluid cells from obstacles
+- `Cell` – enum distinguishing fluid cells from obstacles,useful for boundary condition handling later
 - `LBFluidSim` – the main struct for setting up a simulation  (collision + streaming)
 - 2D **D2Q9 lattice**
 - **BGK (single relaxation time)** collision model
@@ -61,10 +61,11 @@ that each layer does a specific thing, and the lower level structs are passed up
 
 At the lowest level are small math types like `Tup2<f32>`.
 
-These are simple, copyable 2D values used for:
+These are simple 2D vector types that is used all other the place, they could represent:
 - positions in space
 - velocities
 - discrete lattice directions
+- 'index vectors' for computing stuff on the grid 
 
 They provide basic operations (addition, dot product, norms, etc.) and
 are intentionally lightweight, since they’re used everywhere.
@@ -79,7 +80,7 @@ This layer defines everything that is demanded by the D2Q9 LBM model:
 - lattice weights
 - opposite-direction lookup table (`OPPOSITE`)
 - relaxation time `τ`
-- 
+
 ---
 
 ### 3. `FluidState`: single-cell physics
@@ -93,10 +94,9 @@ It stores:
 
 This layer is responsible for:
 - computing equilibrium distributions
-- applying the BGK collision operator
-- reconstructing density and velocity from `f_i`
+- calculating density and velocity from `f_i`
 
-Importantly, `FluidState` knows nothing about its neighbors. 
+`FluidState` knows nothing about its neighbors. 
 
 ---
 
@@ -106,8 +106,8 @@ Each grid location is represented by a `Cell`, which is either:
 - `Fluid(FluidState)`
 - `Obstacle`
 
-This keeps boundary handling explicit and avoids adding too much special cases
-throughout the solver. Obstacle logic is handled at a higher level,
+This makes boundary condition handling simple to keep track of and avoids adding too much special cases
+throughout the code. Obstacle logic is handled at a higher level,
 not inside `FluidState`.
 
 ---
@@ -139,5 +139,9 @@ Its responsibilities are:
 - streaming distributions between neighboring cells
 - handling bounce-back at obstacles
 - updating density and velocities
+
+Questions and possible improvements:
+1. Limited understanding of the Boltzmann equation itself
+2. Simulation failed to simulate KH instability (what went wrong? Is it just a matter of fine-tuning the parameters?)
 
 
