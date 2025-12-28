@@ -21,11 +21,11 @@ This is a learning / exploration project rather than a efficient CFD solver.
 The goal was to build as much as possible from scratch.
 The only major external crates used are:
 - **SDL2** for visualization
-- **ndarray** for storing the simulation grid
+- **ndarray** for storing the simulation grid and for doing computations on it
 
 Core components:
 - `vec2` – lightweight struct for 2D vector math
-- `tup2` – lightweight 2D tuple type, sometimes easier to use then the vec2 struct
+- `tup2` – lightweight 2D tuple type, sometimes easier to use than the vec2 struct
 - `GridStats` – handles grid geometry (shape, length), and allows the computation of 'scalar field' and 'vector field' on it
 - `ObstacleBoard` – fast bitboard-based obstacle representation, able to map lines drawn in position space to flipped bit in the bitboard, generalized so any piece-wise curve can be drawn (such as an entire maze)
 - `FluidState` – stores density and velcocities in a single fluid type cell
@@ -61,7 +61,7 @@ that each layer does a specific thing, and the lower level structs are passed up
 
 At the lowest level are small math types like `Tup2<f32>`.
 
-These are simple 2D vector types that is used all other the place, they could represent:
+These are simple 2D vector types that is used all over the place, they could represent:
 - positions in space
 - velocities
 - discrete lattice directions
@@ -72,7 +72,7 @@ are intentionally lightweight, since they’re used everywhere.
 
 ---
 
-### 2. Lattice constants and model definition
+### 2. Constants 
 
 This layer defines everything that is demanded by the D2Q9 LBM model:
 - discrete velocity directions (`E_I`)
@@ -83,7 +83,7 @@ This layer defines everything that is demanded by the D2Q9 LBM model:
 
 ---
 
-### 3. `FluidState`: single-cell physics
+### 3. `FluidState`
 
 `FluidState` represents the full physical state of **one fluid cell**.
 
@@ -100,7 +100,7 @@ This layer is responsible for:
 
 ---
 
-### 4. `Cell`: fluid vs obstacle
+### 4. `Cell`
 
 Each grid location is represented by a `Cell`, which is either:
 - `Fluid(FluidState)`
@@ -112,7 +112,7 @@ not inside `FluidState`.
 
 ---
 
-### 5. Geometry and domain setup
+### 5. Geometry of simulation domain
 
 This layer describes the geometry of the simulation domain.
 
