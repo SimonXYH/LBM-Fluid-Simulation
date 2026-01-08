@@ -2,9 +2,9 @@
 
 <img width="1563" height="848" alt="image" src="https://github.com/user-attachments/assets/b6ebbd4b-eec7-4fee-98d7-f9604aed2bdb" />
 
-This is a 2D fluid simulation written in **Rust**, using the
-**Lattice Boltzmann Method (LBM)** with a **D2Q9 lattice** and the
-**BGK collision model**.
+This is a 2D fluid simulation written in Rust, using the
+Lattice Boltzmann Method with a D2Q9 lattice and the
+BGK collision model.
 
 This is my first serious attempt at building a fluid simulation from scratch:)
 The main goals of this project are:
@@ -18,13 +18,13 @@ This is a learning / exploration project rather than a efficient CFD solver.
 
 ## What’s implemented
 
-The goal was to build as much as possible from scratch.
+This project is pretty much built from scratch.
 The only major external crates used are:
 - **SDL2** for visualization
 - **ndarray** for storing the simulation grid and for doing computations on it
 
 Core components:
-- `vec2` – lightweight struct for 2D vector math
+- `vec2` – struct for 2D vector math
 - `tup2` – lightweight 2D tuple type, sometimes easier to use than the vec2 struct
 - `GridStats` – handles grid geometry (shape, length), and allows the computation of 'scalar field' and 'vector field' on it
 - `ObstacleBoard` – fast bitboard-based obstacle representation, able to map lines drawn in position space to flipped bit in the bitboard, generalized so any piece-wise curve can be drawn (such as an entire maze)
